@@ -14,10 +14,11 @@
   ],
   "rules": {
     "no-cond-assign": "off",
+    "no-console": "off",
     "space-before-blocks": "error",
     "spaced-comment": "error",
     "curly": "error",
-    "guard-for-in": "error",
+    "guard-for-in": "off",
     "no-caller": "error",
     "no-else-return": "error",
     "no-empty-function": "error",
