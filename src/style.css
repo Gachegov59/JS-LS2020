@@ -1,0 +1,10 @@
+span  {
+    display: block;
+    background: gray;
+    width: 100px;
+}
+
+span div {
+    background: red;
+    height: 2px;
+}
