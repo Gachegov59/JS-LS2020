@@ -1,58 +1,77 @@
-/* 8.1: Функция должна отслеживать добавление и удаление элементов внутри элемента переданного в параметре where
-Как только в where добавляются или удаляются элементы, необходимо сообщать об этом при помощи вызова функции переданной в параметре fn
-
-8.2: При вызове fn необходимо передавать ей в качестве аргумента объект с двумя свойствами:
-    - type: типа события (insert или remove)
-    - nodes: массив из удаленных или добавленных элементов (в зависимости от события)
-
-8.3: Отслеживание должно работать вне зависимости от глубины создаваемых/удаляемых элементов
-    type: 'insert',
-        nodes: [div]
-----------------------
-    type: 'remove',
-        nodes: [div]       */
-
 document.addEventListener('DOMContentLoaded', () => {
-    let node = document.querySelector('body')
+    const container = document.querySelector('.container');
+    const btn = document.querySelector('.btn')
+    let element, bbox, startX, startY, deltaX, deltaY, raf;
 
-    observeChildNodes(node)
-    console.log('node', node)
+    btn.addEventListener('click', function () {
+        container.appendChild(sizerDiv())
+    })
 
-    function observeChildNodes(elem) {
+    function sizerDiv() {
+        let div = document.createElement('div')
 
-        let observer = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
-                // console.log('mutation', mutation);
-                let obj = {
-                    type: '',
-                    nodes: []
-                }
+        function divParameters(div) {
+            function sizer(min, max) {
+                return Math.floor(min + Math.random() * (max + 1 - min));
+            }
 
-                if (!mutation.removedNodes.length) {
-                    obj.type = 'insert'
-                    obj.nodes = [...mutation.addedNodes]
-                }
-                if (mutation.removedNodes.length) {
-                    obj.type = 'remove'
-                    obj.nodes = [...mutation.removedNodes]
-                }
+            div.style.width = `${sizer(5, 100)}px`;
+            div.style.height = `${sizer(5, 100)}px`;
+            div.style.background = `rgb(${sizer(0, 255)},${sizer(0, 255)},${sizer(0, 255)},${sizer(10, 100)}%)`;
+            div.style.top = `${sizer(30, 300)}px`;
+            div.style.left = `${sizer(5, 300)}px`;
+            div.classList.add('box')
 
-                console.log('obj', obj)
+            return div
+        }
 
-            });
-        });
+        divParameters(div)
 
-        observer.observe(elem, {
-            childList: true,
-            subtree: true,
-            characterDataOldValue: true
-        })
-
+        return div
     }
 
-    let div = document.createElement('div')
+    container.addEventListener('pointerdown', userPressed, {passive: true});
 
-    node.appendChild(div)
-    node.firstElementChild.remove()
+    function userPressed(event) {
+        element = event.target;
+        if (element.classList.contains('box')) {
+            startX = event.clientX;
+            startY = event.clientY;
+            bbox = element.getBoundingClientRect();
+            container.addEventListener('pointermove', userMoved, {passive: true});
+            container.addEventListener('pointerup', userReleased, {passive: true});
+            container.addEventListener('pointercancel', userReleased, {passive: true});
+        }
+    }
+
+    function userMoved(event) {
+        // if no previous request for animation frame - we allow js to proccess 'move' event:
+        if (!raf) {
+            deltaX = event.clientX - startX;
+            deltaY = event.clientY - startY;
+            raf = requestAnimationFrame(userMovedRaf);
+        }
+    }
+
+    function userMovedRaf() {
+        element.style.transform = 'translate3d(' + deltaX + 'px,' + deltaY + 'px, 0px)';
+        // once the paint job is done we 'release' animation frame variable to allow next paint job:
+        raf = null;
+    }
+
+    function userReleased(event) {
+        container.removeEventListener('pointermove', userMoved);
+        container.removeEventListener('pointerup', userReleased);
+        container.removeEventListener('pointercancel', userReleased);
+        // if animation frame was scheduled but the user already stopped interaction - we cancel the scheduled frame:
+        if (raf) {
+            cancelAnimationFrame(raf);
+            raf = null;
+        }
+        element.style.left = bbox.left + deltaX + 'px';
+        element.style.top = bbox.top + deltaY + 'px';
+        element.style.transform = 'translate3d(0px,0px,0px)';
+        deltaX = deltaY = null;
+    };
 
 });

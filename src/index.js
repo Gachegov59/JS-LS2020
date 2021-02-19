@@ -1,281 +1,94 @@
-/* ДЗ 4 - работа с DOM */
+/* ДЗ 5 - DOM Events */
 
 /*
  Задание 1:
 
- 1.1: Функция должна создать элемент с тегом DIV
-
- 1.2: В созданный элемент необходимо поместить текст, переданный в параметр text
+ Функция должна добавлять обработчик fn события eventName к элементу target
 
  Пример:
-   createDivWithText('loftschool') // создаст элемент div, поместит в него 'loftschool' и вернет созданный элемент
+   addListener('click', document.querySelector('a'), () => console.log('...')) // должна добавить указанный обработчик кликов на указанный элемент
  */
-function createDivWithText(text) {
-    let div = document.createElement('div')
-
-    div.innerHTML = text;
-
-    return div
+function addListener(eventName, target, fn) {
+    target.addEventListener(eventName, fn)
 }
 
 /*
  Задание 2:
 
- Функция должна вставлять элемент, переданный в параметре what в начало элемента, переданного в параметре where
+ Функция должна удалять у элемента target обработчик fn события eventName
 
  Пример:
-   prepend(document.querySelector('#one'), document.querySelector('#two')) // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
+   removeListener('click', document.querySelector('a'), someHandler) // должна удалить указанный обработчик кликов на указанный элемент
  */
-function prepend(what, where) {
-    where.prepend(what)
+function removeListener(eventName, target, fn) {
+    target.removeEventListener(eventName, fn)
 }
 
 /*
  Задание 3:
 
- 3.1: Функция должна перебрать все дочерние элементы узла, переданного в параметре where
-
- 3.2: Функция должна вернуть массив, состоящий из тех дочерних элементов, следующим соседом которых является элемент с тегом P
+ Функция должна добавить к элементу target такой обработчик на события eventName, чтобы он отменял действия по умолчанию
 
  Пример:
-   Представим, что есть разметка:
-   <body>
-      <div></div>
-      <p></p>
-      <a></a>
-      <span></span>
-      <p></p>
-   </dody>
-
-   findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
+   skipDefault('click', document.querySelector('a')) // после вызова функции, клики на указанную ссылку не должны приводить к переходу на другую страницу
  */
-function findAllPSiblings(where) {
-    let arr = []
-    let items = where.children
-
-    for (let i = 0; i < items.length - 1; i++) {
-        if (items[i].nextElementSibling.nodeName === 'P') {
-            arr.push(items[i])
-        }
-    }
-
-    return arr
-
+function skipDefault(eventName, target) {
+    target.addEventListener(eventName, (e) => {
+        e.preventDefault()
+    })
 }
 
 /*
  Задание 4:
 
- Функция представленная ниже, перебирает все дочерние узлы типа "элемент" внутри узла переданного
- в параметре where и возвращает массив из текстового содержимого найденных элементов.
- Но похоже, что в код функции закралась ошибка и она работает не так, как описано.
-
- Необходимо найти и исправить ошибку в коде так, чтобы функция работала так, как описано выше.
+ Функция должна эмулировать событие click для элемента target
 
  Пример:
-   Представим, что есть разметка:
-   <body>
-      <div>привет</div>
-      <div>loftschool</div>
-   </dody>
-
-   findError(document.body) // функция должна вернуть массив с элементами 'привет' и 'loftschool'
+   emulateClick(document.querySelector('a')) // для указанного элемента должно быть сэмулировано события click
  */
-function findError(where) {
-    let result = [];
+function emulateClick(target) {
+    let event = new Event('click', {
+        bubbles: false
+    });
 
-    for (let child of where.childNodes) {
-        if (child.nodeType === 1) {
-            result.push(child.innerText)
-        }
-    }
-
-    return result;
+    target.dispatchEvent(event)
 }
 
 /*
  Задание 5:
 
- Функция должна перебрать все дочерние узлы элемента переданного в параметре where и удалить из него все текстовые узлы
-
- Задачу необходимо решить без использования рекурсии, то есть можно не уходить вглубь дерева.
- Так же будьте внимательны при удалении узлов, т.к. можно получить неожиданное поведение при переборе узлов
+ Функция должна добавить такой обработчик кликов к элементу target,
+ который реагирует (вызывает fn) только на клики по элементам BUTTON внутри target
 
  Пример:
-   После выполнения функции, дерево <div></div>привет<p></p>loftchool!!!
-   должно быть преобразовано в <div></div><p></p>
+   delegate(document.body, () => console.log('кликнули на button')) // добавит такой обработчик кликов для body, который будет вызывать указанную функцию только если кликнули на кнопку (элемент с тегом button)
  */
-function deleteTextNodes(where) {
-    let result = [];
-    // let where = document.body
-
-    for (let child of where.childNodes) {
-        result.push(child.nodeType === 3);
-        child.remove()
-    }
-
-    return result;
+function delegate(target, fn) {
+    target.addEventListener('click', (e) => {
+        e.target.tagName === 'BUTTON' ? fn() : false
+    })
 }
 
 /*
  Задание 6:
 
- Выполнить предудыщее задание с использование рекурсии - то есть необходимо заходить внутрь каждого дочернего элемента (углубляться в дерево)
-
- Так же будьте внимательны при удалении узлов, т.к. можно получить неожиданное поведение при переборе узлов
-
- Пример:
-   После выполнения функции, дерево <span> <div> <b>привет</b> </div> <p>loftchool</p> !!!</span>
-   должно быть преобразовано в <span><div><b></b></div><p></p></span>
- */
-function deleteTextNodesRecursive(where) {
-
-    for (let i = 0; i < where.childNodes.length; i++) {
-        let child = where.childNodes[i]
-
-        if (child.nodeType === 3) {
-            child.remove()
-            i--
-        } else {
-            deleteTextNodesRecursive(child)
-        }
-    }
-
-}
-
-/*
- Задание 7 *:
-
- Необходимо собрать статистику по всем узлам внутри элемента переданного в параметре root и вернуть ее в виде объекта
- Статистика должна содержать:
- - количество текстовых узлов
- - количество элементов каждого класса
- - количество элементов каждого тега
- Для работы с классами рекомендуется использовать classList
- Постарайтесь не создавать глобальных переменных
+ Функция должна добавить такой обработчик кликов к элементу target,
+ который сработает только один раз и удалится (перестанет срабатывать для последующих кликов по указанному элементу)
 
  Пример:
-   Для дерева <div class="some-class-1"><b>привет!</b> <b class="some-class-1 some-class-2">loftschool</b></div>
-   должен быть возвращен такой объект:
-   {
-     tags: { DIV: 1, B: 2},
-     classes: { "some-class-1": 2, "some-class-2": 1 },
-     texts: 3
-   }
+   once(document.querySelector('button'), () => console.log('обработчик выполнился!')) // добавит такой обработчик кликов для указанного элемента, который вызовется только один раз и затем удалится
  */
-function collectDOMStat(where) {
-    let obj = {
-        classes: {},
-        tags: {},
-        texts: 0
-    }
-
-    function getAll(where) {
-        for (let i = 0; i < where.childNodes.length; i++) {
-            let child = where.childNodes[i]
-
-            if (child.nodeType === 3) {
-                ++obj.texts
-            } else {
-                if (!(child.tagName in obj.tags)) {
-                    obj.tags[`${child.tagName}`] = 1
-                } else {
-                    obj.tags[`${child.tagName}`]++
-                }
-
-                if (child.classList.length) {
-                    let str = child.classList.toString().split(' ')
-
-                    for (let i in str) {
-                        if (!(str[i] in obj.classes)) {
-                            obj.classes[`${str[i]}`] = 1
-                        } else {
-                            obj.classes[`${str[i]}`]++
-                        }
-                    }
-                }
-            }
-            getAll(child)
-        }
-    }
-
-    getAll(where)
-
-    return obj
-}
-
-/*
- Задание 8 *:
-
- 8.1: Функция должна отслеживать добавление и удаление элементов внутри элемента переданного в параметре where
- Как только в where добавляются или удаляются элементы,
- необходимо сообщать об этом при помощи вызова функции переданной в параметре fn
-
- 8.2: При вызове fn необходимо передавать ей в качестве аргумента объект с двумя свойствами:
-   - type: типа события (insert или remove)
-   - nodes: массив из удаленных или добавленных элементов (в зависимости от события)
-
- 8.3: Отслеживание должно работать вне зависимости от глубины создаваемых/удаляемых элементов
-
- Рекомендуется использовать MutationObserver
-
- Пример:
-   Если в where или в одного из его детей добавляется элемент div
-   то fn должна быть вызвана с аргументом:
-   {
-     type: 'insert',
-     nodes: [div]
-   }
-
-   ------
-
-   Если из where или из одного из его детей удаляется элемент div
-   то fn должна быть вызвана с аргументом:
-   {
-     type: 'remove',
-     nodes: [div]
-   }
- */
-function observeChildNodes(elem, fn) {
-
-    let observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-            console.log('mutation', mutation);
-            let obj = {
-                type: '',
-                nodes: []
-            }
-
-            if (!mutation.removedNodes.length) {
-                obj.type = 'insert'
-                obj.nodes = [...mutation.addedNodes]
-            }
-            if (mutation.removedNodes.length) {
-                obj.type = 'remove'
-                obj.nodes = [...mutation.removedNodes]
-            }
-            console.log('obj', obj)
-            console.log(obj.nodes)
-            fn(obj)
-        });
-    });
-
-    observer.observe(elem, {
-        childList: true,
-        subtree: true,
-        characterDataOldValue: true
-    })
-
-
+function once(target, fn) {
+    target.addEventListener('click', () => {
+        fn()
+    }, {once: true})
 }
 
 export {
-    createDivWithText,
-    prepend,
-    findAllPSiblings,
-    findError,
-    deleteTextNodes,
-    deleteTextNodesRecursive,
-    collectDOMStat,
-    observeChildNodes
+    addListener,
+    removeListener,
+    skipDefault,
+    emulateClick,
+    delegate,
+    once
 };
