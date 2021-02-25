@@ -6,6 +6,10 @@ html(lang='en')
         link(href="style.css" rel='stylesheet')
         script(src='test.js')
     body
-        b нажми!
-        button.btn СОЗДАТЬ
-        .container
+        button.btn загрузить
+        #loading-block.hide Загрузка...
+        #filter-block(style='display: none;')
+            input#filter-input(type='text' placeholder='название города')
+            #filter-result
+
+        #homework-container

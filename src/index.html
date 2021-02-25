@@ -6,8 +6,13 @@
     <link href="style.css" rel="stylesheet">
     <script src="test.js"></script>
   </head>
-  <body><b>нажми!</b>
-    <button class="btn">СОЗДАТЬ</button>
-    <div class="container"></div>
+  <body>
+    <button class="btn">загрузить</button>
+    <div class="hide" id="loading-block">Загрузка...</div>
+    <div id="filter-block" style="display: none;">
+      <input id="filter-input" type="text" placeholder="название города">
+      <div id="filter-result"></div>
+    </div>
+    <div id="homework-container"></div>
   </body>
 </html>

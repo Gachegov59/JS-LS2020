@@ -1,77 +1,77 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const container = document.querySelector('.container');
-    const btn = document.querySelector('.btn')
-    let element, bbox, startX, startY, deltaX, deltaY, raf;
+    let homeworkContainer = document.querySelector('#homework-container')
+    let filterInput = document.querySelector('#filter-input')
+    let citiesArr;
 
-    btn.addEventListener('click', function () {
-        container.appendChild(sizerDiv())
+    loadTowns().then(data => {
+        citiesArr = data
+        renderCities(data)
     })
 
-    function sizerDiv() {
-        let div = document.createElement('div')
+    filterInput.addEventListener('keyup', function (e) {
+        filterCities(this.value)
+    })
 
-        function divParameters(div) {
-            function sizer(min, max) {
-                return Math.floor(min + Math.random() * (max + 1 - min));
+
+    function renderCities(data) {
+        while (homeworkContainer.lastElementChild) {
+            homeworkContainer.removeChild(homeworkContainer.lastElementChild);
+        }
+
+        data.forEach(el => {
+            let div = document.createElement('div')
+
+            div.innerHTML = el.name
+            homeworkContainer.appendChild(div)
+        })
+
+    }
+
+
+    function filterCities(val) {
+        let newArr = citiesArr.slice()
+
+        for (let i = 0; i < newArr.length; i++) {
+            if (newArr[i].name.toLowerCase().indexOf(val) < 0) {
+                newArr.splice(i, 1)
+                i--
             }
-
-            div.style.width = `${sizer(5, 100)}px`;
-            div.style.height = `${sizer(5, 100)}px`;
-            div.style.background = `rgb(${sizer(0, 255)},${sizer(0, 255)},${sizer(0, 255)},${sizer(10, 100)}%)`;
-            div.style.top = `${sizer(30, 300)}px`;
-            div.style.left = `${sizer(5, 300)}px`;
-            div.classList.add('box')
-
-            return div
         }
-
-        divParameters(div)
-
-        return div
-    }
-
-    container.addEventListener('pointerdown', userPressed, {passive: true});
-
-    function userPressed(event) {
-        element = event.target;
-        if (element.classList.contains('box')) {
-            startX = event.clientX;
-            startY = event.clientY;
-            bbox = element.getBoundingClientRect();
-            container.addEventListener('pointermove', userMoved, {passive: true});
-            container.addEventListener('pointerup', userReleased, {passive: true});
-            container.addEventListener('pointercancel', userReleased, {passive: true});
+        renderCities(newArr)
+        if (val === '') {
+            renderCities([])
         }
     }
 
-    function userMoved(event) {
-        // if no previous request for animation frame - we allow js to proccess 'move' event:
-        if (!raf) {
-            deltaX = event.clientX - startX;
-            deltaY = event.clientY - startY;
-            raf = requestAnimationFrame(userMovedRaf);
-        }
-    }
 
-    function userMovedRaf() {
-        element.style.transform = 'translate3d(' + deltaX + 'px,' + deltaY + 'px, 0px)';
-        // once the paint job is done we 'release' animation frame variable to allow next paint job:
-        raf = null;
-    }
+    function loadTowns() {
+        let loadingBlock = document.querySelector('#loading-block')
+        let filterBlock = document.querySelector('#filter-block')
 
-    function userReleased(event) {
-        container.removeEventListener('pointermove', userMoved);
-        container.removeEventListener('pointerup', userReleased);
-        container.removeEventListener('pointercancel', userReleased);
-        // if animation frame was scheduled but the user already stopped interaction - we cancel the scheduled frame:
-        if (raf) {
-            cancelAnimationFrame(raf);
-            raf = null;
-        }
-        element.style.left = bbox.left + deltaX + 'px';
-        element.style.top = bbox.top + deltaY + 'px';
-        element.style.transform = 'translate3d(0px,0px,0px)';
-        deltaX = deltaY = null;
-    };
+        return new Promise(function (resolve, reject) {
+            fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
+                .then(res => {
+                    loadingBlock.classList.remove('hide')
+
+                    return res.json()
+
+                })
+                .then(cities => {
+                    let sortCities = cities.sort((a, b) => {
+                        return a.name < b.name ? -1 : 1
+                    })
+
+                    resolve(sortCities)
+                })
+                .finally(() => {
+                    loadingBlock.classList.add('hide')
+                    // console.log(filterBlock)
+                    filterBlock.style.display = 'block'
+
+                    return filterBlock
+                })
+                .catch(e => reject(e))
+        });
+    }
 
 });

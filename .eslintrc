@@ -1,7 +1,7 @@
 {
   "parserOptions": {
     "sourceType": "module",
-    "ecmaVersion": 7
+    "ecmaVersion": 8
   },
   "env": {
     "node": true,
@@ -46,7 +46,7 @@
     "no-multiple-empty-lines": [
       "error",
       {
-        "max": 1,
+        "max": 20,
         "maxEOF": 1
       }
     ],
