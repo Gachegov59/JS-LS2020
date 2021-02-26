@@ -11,20 +11,29 @@ document.addEventListener('DOMContentLoaded', () => {
     filterInput.addEventListener('keyup', function (e) {
         filterCities(this.value)
     })
-
+    document.addEventListener('click', e=> {
+        if (e.target.tagName ==='LI') {
+            console.log(e.target.textContent)
+        }
+    })
 
     function renderCities(data) {
+        let fragment = document.createDocumentFragment()
+
         while (homeworkContainer.lastElementChild) {
             homeworkContainer.removeChild(homeworkContainer.lastElementChild);
         }
 
         data.forEach(el => {
-            let div = document.createElement('div')
+            let li = document.createElement('li')
 
-            div.innerHTML = el.name
-            homeworkContainer.appendChild(div)
+            li.innerHTML = el.name
+            // li.addEventListener('click', function() {
+            //     console.log(li.innerHTML)
+            // })
+            fragment.appendChild(li)
         })
-
+        homeworkContainer.appendChild(fragment)
     }
 
 
