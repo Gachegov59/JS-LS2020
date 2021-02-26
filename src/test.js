@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadTowns().then(data => {
         citiesArr = data
-        renderCities(data)
     })
 
     filterInput.addEventListener('keyup', function (e) {
@@ -28,9 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
             let li = document.createElement('li')
 
             li.innerHTML = el.name
-            // li.addEventListener('click', function() {
-            //     console.log(li.innerHTML)
-            // })
             fragment.appendChild(li)
         })
         homeworkContainer.appendChild(fragment)
@@ -56,12 +52,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadTowns() {
         let loadingBlock = document.querySelector('#loading-block')
         let filterBlock = document.querySelector('#filter-block')
+        let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json'
 
         return new Promise(function (resolve, reject) {
-            fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
+            fetch(url)
                 .then(res => {
                     loadingBlock.classList.remove('hide')
-
+                    loadingBlock.style.display = 'block'
+                    
                     return res.json()
 
                 })
@@ -70,7 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         return a.name < b.name ? -1 : 1
                     })
 
+
                     resolve(sortCities)
+                    loadingBlock.style.display = 'none'
                 })
                 .finally(() => {
                     loadingBlock.classList.add('hide')

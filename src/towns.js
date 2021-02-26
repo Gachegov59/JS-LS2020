@@ -68,6 +68,7 @@ function loadTowns() {
         fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
             .then(res => {
                 loadingBlock.classList.remove('hide')
+                loadingBlock.style.display = 'block'
 
                 return res.json()
 
@@ -78,6 +79,7 @@ function loadTowns() {
                 })
 
                 resolve(sortCities)
+                loadingBlock.style.display = 'none'
             })
             .finally(() => {
                 loadingBlock.classList.add('hide')
@@ -89,6 +91,10 @@ function loadTowns() {
             .catch(e => reject(e))
     });
 }
+
+loadTowns().then(data => {
+    citiesArr = data
+})
 
 filterInput.addEventListener('keyup', function() {
     filterCities(this.value)
@@ -110,17 +116,19 @@ function filterCities(val) {
 }
 
 function renderCities(data) {
-    while (homeworkContainer.lastElementChild) {
-        homeworkContainer.removeChild(homeworkContainer.lastElementChild);
+    let fragment = document.createDocumentFragment()
+
+    while (filterResult.lastElementChild) {
+        filterResult.removeChild(filterResult.lastElementChild);
     }
 
     data.forEach(el => {
-        let div = document.createElement('div')
+        let li = document.createElement('li')
 
-        div.innerHTML = el.name
-        homeworkContainer.appendChild(div)
+        li.innerHTML = el.name
+        fragment.appendChild(li)
     })
-
+    filterResult.appendChild(fragment)
 }
 
 
