@@ -1,86 +1,139 @@
+/*
+
+
+     7.3: На странице должно быть текстовое поле для фильтрации cookie
+
+     +В таблице должны быть только те cookie, в имени или значении которых, хотя бы частично, есть введенное значение
+
+     +Если в поле фильтра пусто, то должны выводиться все доступные cookie
+
+     +Если добавляемая cookie не соответсвует фильтру, то она должна быть добавлена только в браузер, но не в таблицу
+
+     Если добавляется cookie, с именем уже существующей cookie и ее новое значение не соответствует фильтру,
+     то ее значение должно быть обновлено в браузере, а из таблицы cookie должна быть удалена
+
+ Запрещено использовать сторонние библиотеки. Разрешено пользоваться только тем, что встроено в браузер
+ */
+
+/*
+ homeworkContainer - это контейнер для всех ваших домашних заданий
+ Если вы создаете новые html-элементы и добавляете их на страницу, то добавляйте их только в этот контейнер
+
+ Пример:
+   const newDiv = document.createElement('div');
+   homeworkContainer.appendChild(newDiv);
+ */
+
+
 document.addEventListener('DOMContentLoaded', () => {
-    let homeworkContainer = document.querySelector('#homework-container')
-    let filterInput = document.querySelector('#filter-input')
-    let citiesArr;
 
-    loadTowns().then(data => {
-        citiesArr = data
-        renderCities(data)
-    })
+    const homeworkContainer = document.querySelector('#homeworkContainer');
+    // текстовое поле для фильтрации cookie
+    const filterNameInput = homeworkContainer.querySelector('#filter-name-input');
+    // текстовое поле с именем cookie
+    const addNameInput = homeworkContainer.querySelector('#add-name-input');
+    // текстовое поле со значением cookie
+    const addValueInput = homeworkContainer.querySelector('#add-value-input');
+    // кнопка "добавить cookie"
+    const addButton = homeworkContainer.querySelector('#add-button');
+    // таблица со списком cookie
+    const listTable = homeworkContainer.querySelector('#list-table tbody');
+    let cookie
+    let filterValue
 
-    filterInput.addEventListener('keyup', function (e) {
-        filterCities(this.value)
+
+    filterNameInput.addEventListener('keyup', function () {
+        filterValue = this.value
+        render(this.value)
+    });
+
+    // ДОБОВЛЕНИЕ В COOKIE
+    addButton.addEventListener('click', cookieAdd);
+    addNameInput.addEventListener('keyup', (e) => {
+        let keyCode = e.keyCode || e.charCode || e.which;
+
+        if (keyCode === 13) {
+            cookieAdd()
+        }
     })
-    document.addEventListener('click', e=> {
-        if (e.target.tagName ==='LI') {
-            console.log(e.target.textContent)
+    addValueInput.addEventListener('keyup', (e) => {
+        let keyCode = e.keyCode || e.charCode || e.which;
+
+        if (keyCode === 13) {
+            cookieAdd()
         }
     })
 
-    function renderCities(data) {
-        let fragment = document.createDocumentFragment()
+    function cookieAdd() {
+        let nameInput = addNameInput.value;
+        let valueInput = addValueInput.value;
 
-        while (homeworkContainer.lastElementChild) {
-            homeworkContainer.removeChild(homeworkContainer.lastElementChild);
+
+        if (nameInput !== '' && valueInput !== '') {
+            document.cookie = addNameInput.value + '=' + addValueInput.value;
+            render(cookie)
         }
 
-        data.forEach(el => {
-            let li = document.createElement('li')
+        if (nameInput === filterValue || valueInput === filterValue || filterValue === '' || filterValue === undefined) {
+            render(cookie)
+            addNameInput.value = ''
+            addValueInput.value = ''
+        }
 
-            li.innerHTML = el.name
-            // li.addEventListener('click', function() {
-            //     console.log(li.innerHTML)
-            // })
-            fragment.appendChild(li)
-        })
-        homeworkContainer.appendChild(fragment)
     }
 
+    // УДАЛЕНИЕ ИЗ СПИСКА И COOKIE
+    listTable.addEventListener('click', (e) => {
+        let name = e.target.previousSibling.previousSibling.textContent
 
-    function filterCities(val) {
-        let newArr = citiesArr.slice()
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        render(cookie)
+    })
 
-        for (let i = 0; i < newArr.length; i++) {
-            if (newArr[i].name.toLowerCase().indexOf(val) < 0) {
-                newArr.splice(i, 1)
-                i--
+    // ДОБОВЛЕНИЕ В DOM ИЗ COOKIE + filter
+    function render(filter) {
+        let fragment = document.createDocumentFragment()
+        let cookieArr
+
+        if (document.cookie.split(';').length) {
+            cookieArr = document.cookie.split('; ')
+        }
+
+        while (listTable.lastElementChild) {
+            listTable.removeChild(listTable.lastElementChild);
+        }
+
+        console.log(cookieArr[0].split('=')[0].indexOf(filterValue), filterValue)
+
+        for (let i = 0; i < cookieArr.length; i++) {
+
+            let tr = document.createElement('tr')
+            let tableName = document.createElement('td')
+            let tableValue = document.createElement('td')
+            let tableBtn = document.createElement('button')
+
+            let name = cookieArr[i].split('=')[0]
+            let value = cookieArr[i].split('=')[1]
+
+
+
+            // if (cookieArr[i].length !== 0 && (name === filterValue || value === filterValue || filterValue === '' || filterValue === undefined)) {
+            if (cookieArr[i].length !== 0 && (name.indexOf(filterValue) > -1 || value.indexOf(filterValue) > -1 || filterValue === '' || filterValue === undefined)) {
+
+
+                tableName.innerHTML = name
+                tableValue.innerHTML = value
+                tableBtn.innerHTML = 'удалить'
+
+                tr.appendChild(tableName)
+                tr.appendChild(tableValue)
+                tr.appendChild(tableBtn)
+
+                fragment.appendChild(tr)
             }
         }
-        renderCities(newArr)
-        if (val === '') {
-            renderCities([])
-        }
+        listTable.appendChild(fragment)
     }
 
-
-    function loadTowns() {
-        let loadingBlock = document.querySelector('#loading-block')
-        let filterBlock = document.querySelector('#filter-block')
-
-        return new Promise(function (resolve, reject) {
-            fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
-                .then(res => {
-                    loadingBlock.classList.remove('hide')
-
-                    return res.json()
-
-                })
-                .then(cities => {
-                    let sortCities = cities.sort((a, b) => {
-                        return a.name < b.name ? -1 : 1
-                    })
-
-                    resolve(sortCities)
-                })
-                .finally(() => {
-                    loadingBlock.classList.add('hide')
-                    // console.log(filterBlock)
-                    filterBlock.style.display = 'block'
-
-                    return filterBlock
-                })
-                .catch(e => reject(e))
-        });
-    }
-
+    render()
 });

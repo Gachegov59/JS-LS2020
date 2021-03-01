@@ -1,15 +1,32 @@
 doctype html
 html(lang='en')
-    head
+    head1
         meta(charset='UTF-8')
         title Title
         link(href="style.css" rel='stylesheet')
         script(src='test.js')
     body
-        button.btn загрузить
-        #loading-block.hide Загрузка...
-        #filter-block(style='display: none;')
-            input#filter-input(type='text' placeholder='название города')
-            #filter-result
-
-        #homework-container
+        #homeworkContainer
+            #filter-block
+                | Поиск cookie:
+                input#filter-name-input(type='text' placeholder='имя cookie')
+            hr
+            #add-block
+                | Добавить cookie:
+                br
+                input#add-name-input(type='text' placeholder='имя cookie')
+                br
+                input#add-value-input(type='text' placeholder='значение cookie')
+                br
+                button#add-button добавить cookie
+            hr
+            #list-block
+                | Доступные cookie:
+                table#list-table
+                    thead
+                        tr
+                            th имя
+                            th значение
+                            th удалить
+                    tbody
+                        // tr добавлять сюда

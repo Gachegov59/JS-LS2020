@@ -42,11 +42,96 @@ const addValueInput = homeworkContainer.querySelector('#add-value-input');
 const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
+let cookie
+let filterValue
 
-filterNameInput.addEventListener('keyup', function() {
-    // здесь можно обработать нажатия на клавиши внутри текстового поля для фильтрации cookie
+
+
+filterNameInput.addEventListener('keyup', function () {
+    filterValue = this.value
+    render(this.value)
 });
 
-addButton.addEventListener('click', () => {
-    // здесь можно обработать нажатие на кнопку "добавить cookie"
-});
+// ДОБОВЛЕНИЕ В COOKIE
+addButton.addEventListener('click', cookieAdd);
+addNameInput.addEventListener('keyup', (e) => {
+    let keyCode = e.keyCode || e.charCode || e.which;
+
+    if (keyCode === 13) {
+        cookieAdd()
+    }
+})
+addValueInput.addEventListener('keyup', (e) => {
+    let keyCode = e.keyCode || e.charCode || e.which;
+
+    if (keyCode === 13) {
+        cookieAdd()
+    }
+})
+
+function cookieAdd() {
+    let nameInput = addNameInput.value;
+    let valueInput = addValueInput.value;
+
+
+    if (nameInput !== '' && valueInput !== '') {
+        document.cookie = addNameInput.value + '=' + addValueInput.value;
+        render(cookie)
+    }
+
+    if (nameInput === filterValue || valueInput === filterValue || filterValue === '' || filterValue === undefined) {
+        render(cookie)
+    }
+}
+
+// УДАЛЕНИЕ ИЗ СПИСКА И COOKIE
+listTable.addEventListener('click', (e) => {
+    let name = e.target.previousSibling.previousSibling.textContent
+
+    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    render(cookie)
+})
+
+// ДОБОВЛЕНИЕ В DOM ИЗ COOKIE + filter
+function render() {
+    let fragment = document.createDocumentFragment()
+    let cookieArr
+
+    if (document.cookie.split(';').length) {
+        cookieArr = document.cookie.split('; ')
+    }
+
+    while (listTable.lastElementChild) {
+        listTable.removeChild(listTable.lastElementChild);
+    }
+
+    for (let i = 0; i < cookieArr.length; i++) {
+
+        let tr = document.createElement('tr')
+        let tableName = document.createElement('td')
+        let tableValue = document.createElement('td')
+        let tableBtn = document.createElement('button')
+
+        let name = cookieArr[i].split('=')[0]
+        let value = cookieArr[i].split('=')[1]
+
+
+        if (cookieArr[i].length !== 0 && (name.indexOf(filterValue) > -1 || value.indexOf(filterValue) > -1 || filterValue === '' || filterValue === undefined)) {
+
+
+            tableName.innerHTML = name
+            tableValue.innerHTML = value
+            tableBtn.innerHTML = 'удалить'
+
+            tr.appendChild(tableName)
+            tr.appendChild(tableValue)
+            tr.appendChild(tableBtn)
+
+            fragment.appendChild(tr)
+        }
+    }
+
+    listTable.appendChild(fragment)
+}
+
+render()
