@@ -1,0 +1,37 @@
+.form {
+  input, textarea {
+    width: 100%;
+    border-radius: 30px;
+    border: solid 1px #c4c4c4;
+    padding: 10px 15px;
+    font-size: 15px;
+    font-weight: 300;
+    font-family: FiraSans;
+    &::placeholder {
+      color: #9f9f9f;
+    }
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 3px #9f9f9f;
+    }
+  }
+  &__title {
+    color: #ff8663;
+    font-weight: 500;
+  }
+  &__input {
+    display: flex;
+    margin: 16px 0;
+
+    input {
+    }
+  }
+
+  &__textarea {
+    display: flex;
+    margin: 16px 0;
+
+    textarea {
+    }
+  }
+}
