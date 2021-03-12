@@ -1,0 +1,83 @@
+.carousel {
+  padding: 10px 10px 0;
+  box-shadow: 0 0 3px #9f9f9f;
+  //position: absolute;
+  top: 100px;
+  left: 100px;
+  display: flex;
+  align-items: center;
+  height: 300px;
+  width: 400px;
+  background: white;
+
+  &__close {
+    position: absolute;
+
+    svg {
+      path {
+        fill: black;
+      }
+    }
+  }
+
+  &__arrow {
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+
+    &:hover {
+      transition: all .3s ease;
+      svg  {
+        path {
+          fill: red;
+        }
+      }
+
+    }
+    svg  {
+      width: 20px;
+      path {
+        fill: grey;
+        opacity: .5;
+      }
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+  }
+  &__reviews {
+    flex-grow: 1;
+    border-bottom: 1px solid rgb(128 128 128 / 50%);;
+  }
+  &__sliders {
+    display: flex;
+    padding: 5px 0;
+  }
+  &__slider {
+    flex-grow: 1;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    &:hover {
+      transition: all .3s ease;
+      color: red;
+    }
+    &._active {
+     &::after {
+       content: '';
+       position: absolute;
+       left: 50%;
+       top: -7px;
+       transform: translateX(-50%);
+       display: block;
+       background: black;
+       width: 25px;
+       height: 4px;
+     }
+    }
+  }
+}

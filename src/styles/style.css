@@ -1,7 +1,6 @@
 @charset "UTF-8";
 *, ::after, ::before {
   box-sizing: border-box;
-  font-family: "Fira Sans", sans-serif;
 }
 
 .scroll::-webkit-scrollbar {
@@ -22,7 +21,7 @@
   padding: 10px 15px;
   font-size: 15px;
   font-weight: 300;
-  font-family: FiraSans;
+  font-family: FiraSans, serif;
 }
 .form input::placeholder, .form textarea::placeholder {
   color: #9f9f9f;
@@ -37,17 +36,17 @@
 }
 .form__input {
   display: flex;
-  margin: 16px 0;
+  margin: 10px 0;
 }
 .form__textarea {
   display: flex;
-  margin: 16px 0;
+  margin: 10px 0;
 }
 .popup {
   border-radius: 5%;
   background: white;
   width: 379px;
-  position: absolute;
+  height: auto;
   top: 50px;
   left: 150px;
   overflow: hidden;
@@ -72,7 +71,7 @@
   fill: white;
 }
 .popup__inner {
-  padding: 0 15px 20px;
+  padding: 0 15px 10px;
 }
 .popup__close {
   background: transparent;
@@ -116,8 +115,84 @@
   justify-content: flex-end;
 }
 
+.carousel {
+  padding: 10px 10px 0;
+  box-shadow: 0 0 3px #9f9f9f;
+  top: 100px;
+  left: 100px;
+  display: flex;
+  align-items: center;
+  height: 300px;
+  width: 400px;
+  background: white;
+}
+.carousel__close {
+  position: absolute;
+}
+.carousel__close svg path {
+  fill: black;
+}
+.carousel__arrow {
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+}
+.carousel__arrow:hover {
+  transition: all 0.3s ease;
+}
+.carousel__arrow:hover svg path {
+  fill: red;
+}
+.carousel__arrow svg {
+  width: 20px;
+}
+.carousel__arrow svg path {
+  fill: grey;
+  opacity: 0.5;
+}
+.carousel__content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+}
+.carousel__reviews {
+  flex-grow: 1;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.5);
+}
+.carousel__sliders {
+  display: flex;
+  padding: 5px 0;
+}
+.carousel__slider {
+  flex-grow: 1;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+}
+.carousel__slider:hover {
+  transition: all 0.3s ease;
+  color: red;
+}
+.carousel__slider._active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -7px;
+  transform: translateX(-50%);
+  display: block;
+  background: black;
+  width: 25px;
+  height: 4px;
+}
+
 .review {
   margin-bottom: 25px;
+}
+.carousel .review {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 .review__name {
   font-size: 16px;
@@ -127,14 +202,29 @@
 .review__info {
   display: flex;
 }
+.carousel .review__info {
+  flex-direction: column;
+}
 .review__about {
   opacity: 0.75;
   font-size: 16px;
   color: rgba(79, 79, 79, 0.75);
 }
+.carousel .review__about {
+  color: black;
+  opacity: 1;
+  margin-bottom: 15px;
+}
 .review__text {
   margin-top: 10px;
   color: #4f4f4f;
+}
+.review__date {
+  margin-top: auto;
+  margin-left: auto;
+  padding: 10px;
+  color: grey;
+  opacity: 0.8;
 }
 
 .btn {
@@ -153,6 +243,20 @@
   background: white;
   color: #ff8663;
   box-shadow: 0 0 3px #ff8663;
+}
+
+.ymaps-2-1-78-balloon, .ymaps-2-1-78-balloon__layout {
+  border-radius: 5% !important;
+}
+
+.ymaps-2-1-78-balloon__content {
+  margin-right: 0 !important;
+  padding: 0 !important;
+  border-radius: 5% !important;
+}
+.ymaps-2-1-78-balloon__content ymaps {
+  height: auto !important;
+  width: 379px !important;
 }
 
 /*# sourceMappingURL=style.css.map */

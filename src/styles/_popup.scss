@@ -2,7 +2,8 @@
   border-radius: 5%;
   background: white;
   width: 379px;
-  position: absolute;
+  height: auto;
+  //position: absolute;
   top: 50px;
   left: 150px;
   overflow: hidden;
@@ -30,7 +31,7 @@
   }
 
   &__inner {
-    padding: 0 15px 20px;
+    padding: 0 15px 10px;
   }
   &__close {
     background: transparent;

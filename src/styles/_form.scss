@@ -6,7 +6,7 @@
     padding: 10px 15px;
     font-size: 15px;
     font-weight: 300;
-    font-family: FiraSans;
+    font-family: FiraSans, serif;
     &::placeholder {
       color: #9f9f9f;
     }
@@ -21,7 +21,7 @@
   }
   &__input {
     display: flex;
-    margin: 16px 0;
+    margin: 10px 0;
 
     input {
     }
@@ -29,7 +29,7 @@
 
   &__textarea {
     display: flex;
-    margin: 16px 0;
+    margin: 10px 0;
 
     textarea {
     }
