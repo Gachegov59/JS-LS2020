@@ -249,6 +249,14 @@
   border-radius: 5% !important;
 }
 
+.ymaps-2-1-78-balloon__close-button {
+  background: url("../icons/close.svg") no-repeat !important;
+  width: 20px !important;
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+}
+
 .ymaps-2-1-78-balloon__content {
   margin-right: 0 !important;
   padding: 0 !important;

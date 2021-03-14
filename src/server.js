@@ -1,23 +1,13 @@
-// // const http = require('http')
-// //
-// // http
-// //     .createServer((req, res) => {
-// //
-// //     })
-// //     .listen(8800, ()=>{
-// //
-// //     })
-//
-// const http = require('http')
-// const server = http.createServer();
-//
-// server.on('request', (req, res) => {
-//
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
-//     res.writeHead(200, { 'content-Type': 'text/plain' });
-//     res.end('12111')
-//
-// })
-//
-// server.listen(3000, '127.0.0.1', () => console.log('сервер работате'))
+// TODO: Replace the following with your app's Firebase project configuration
+// For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
+export var firebaseConfig = {
+    apiKey: 'AIzaSyC1L6hDvbdT6pplHXkKQDPsgTv8oF2h-3o',
+    authDomain: 'ymap-review.firebaseapp.com',
+    databaseURL: 'https://ymap-review-default-rtdb.firebaseio.com',
+    projectId: 'ymap-review',
+    storageBucket: 'ymap-review.appspot.com',
+    messagingSenderId: '233303430202',
+    appId: '1:233303430202:web:d1740f8a615de825909103',
+    measurementId: 'G-M6SV40QQ08'
+};
+
