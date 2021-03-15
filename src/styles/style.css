@@ -33,6 +33,7 @@
 .form__title {
   color: #ff8663;
   font-weight: 500;
+  margin: 5px 0;
 }
 .form__input {
   display: flex;
@@ -54,7 +55,7 @@
 }
 .popup__head {
   background: #ff8663;
-  padding: 15px;
+  padding: 10px;
   font-size: 12px;
   font-weight: 300;
   color: white;
@@ -102,7 +103,7 @@
 }
 .popup__reviews {
   margin-top: 15px;
-  height: 140px;
+  height: 120px;
   border-bottom: 1px solid #f0f0f0;
   overflow-y: auto;
 }
@@ -187,7 +188,7 @@
 }
 
 .review {
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 .carousel .review {
   display: flex;
@@ -216,7 +217,7 @@
   margin-bottom: 15px;
 }
 .review__text {
-  margin-top: 10px;
+  margin-top: 5px;
   color: #4f4f4f;
 }
 .review__date {
@@ -253,8 +254,8 @@
   background: url("../icons/close.svg") no-repeat !important;
   width: 20px !important;
   position: absolute !important;
-  top: 10px !important;
-  right: 10px !important;
+  top: 5px !important;
+  right: 15px !important;
 }
 
 .ymaps-2-1-78-balloon__content {
@@ -262,9 +263,20 @@
   padding: 0 !important;
   border-radius: 5% !important;
 }
-.ymaps-2-1-78-balloon__content ymaps {
+.ymaps-2-1-78-balloon__content > ymaps {
   height: auto !important;
-  width: 379px !important;
+  min-height: 200px !important;
+  max-width: 379px !important;
+}
+
+.ballon_wrapper {
+  display: flex;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.ballon_wrapper .ballon_body {
+  font-weight: bold;
+  margin-right: 5px;
 }
 
 /*# sourceMappingURL=style.css.map */
