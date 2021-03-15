@@ -12,10 +12,10 @@ export let formTemplate =
     '          <form class="popup__form form">\n' +
     '            <h3 class="form__title">ВАШ ОТЗЫВ</h3>\n' +
     '            <div class="form__input">\n' +
-    '              <input placeholder="Ваше имя" type="text" name="name">\n' +
+    '              <input placeholder="Ваше имя" type="text" name="name" autofocus>\n' +
     '            </div>\n' +
     '            <div class="form__input">\n' +
-    '              <input placeholder="Укажите место" type="text" name="placeName">\n' +
+    '              <input placeholder="Укажите место" type="text" name="placeName" pattern="[A-Za-zА-Яа-яЁё]">\n' +
     '            </div>\n' +
     '            <div class="form__textarea">\n' +
     '              <textarea placeholder="Поделитесь впечатлениями" rows="5" name="review"></textarea>\n' +
