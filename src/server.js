@@ -25,7 +25,7 @@ export let getDataFB = new Promise(function (res, rej) {
 
     marks.on('value', (elem) => {
         marksFB = elem.val()
-        console.log('fb - marksFB', marksFB)
+        // console.log('fb - marksFB', marksFB)
         res()
     });
 

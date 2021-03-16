@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             // validReview = patternReview.test(value)
                             validReview = value.length > 1
                         }
-                        console.log(validName, validPlaceName, validReview)
+                        // console.log(validName, validPlaceName, validReview)
                     })
                     document.addEventListener('click', function (e) {
                         e.preventDefault()
