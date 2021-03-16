@@ -15,10 +15,10 @@ export let formTemplate =
     '              <input placeholder="Ваше имя" type="text" name="name" autofocus>\n' +
     '            </div>\n' +
     '            <div class="form__input">\n' +
-    '              <input placeholder="Укажите место" type="text" name="placeName" pattern="[A-Za-zА-Яа-яЁё]">\n' +
+    '              <input placeholder="Укажите место" type="text" name="placeName" >\n' +
     '            </div>\n' +
     '            <div class="form__textarea">\n' +
-    '              <textarea placeholder="Поделитесь впечатлениями" rows="5" name="review"></textarea>\n' +
+    '              <textarea placeholder="Поделитесь впечатлениями" rows="5" name="review" ></textarea>\n' +
     '            </div>\n' +
     '            <div class="popup__btn _right">\n' +
     '              <button class="btn">Добавить</button>\n' +

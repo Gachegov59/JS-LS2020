@@ -31,6 +31,9 @@
   font-weight: 300;
   font-family: FiraSans, serif;
 }
+.valid .form input, .valid .form textarea {
+  box-shadow: 0 0 3px #f37575;
+}
 .form input::placeholder, .form textarea::placeholder {
   color: #9f9f9f;
 }
@@ -59,7 +62,6 @@
   top: 50px;
   left: 150px;
   overflow: hidden;
-  box-shadow: 0 0 3px #9f9f9f;
 }
 .popup__head {
   background: #ff8663;
@@ -254,40 +256,39 @@
   box-shadow: 0 0 3px #ff8663;
 }
 
-#map {
-  height: 100%;
-  width: 100%;
+.ymaps-2-1-78-balloon, .ymaps-2-1-78-balloon__layout {
+  border-radius: 5% !important;
 }
 
-._custom {
-  border-radius: 5% !important;
+.ymaps-2-1-78-balloon__layout {
+  padding: 2px 3px !important;
 }
-._custom .ymaps-2-1-78-balloon__layout {
-  border-radius: 5% !important;
-}
-._custom .ymaps-2-1-78-balloon__close-button {
+
+.ymaps-2-1-78-balloon__close-button {
   background: url("../icons/close.svg") no-repeat !important;
   width: 20px !important;
   position: absolute !important;
   top: 5px !important;
   right: 15px !important;
 }
-._custom .ymaps-2-1-78-balloon__content {
+
+.ymaps-2-1-78-balloon__content {
   margin-right: 0 !important;
   padding: 0 !important;
   border-radius: 5% !important;
 }
-._custom .ymaps-2-1-78-balloon__content > ymaps {
+.ymaps-2-1-78-balloon__content > ymaps {
   height: auto !important;
   min-height: 200px !important;
   max-width: 379px !important;
 }
-._custom .ballon_wrapper {
+
+.ballon_wrapper {
   display: flex;
   font-size: 16px;
   margin-bottom: 10px;
 }
-._custom .ballon_wrapper .ballon_body {
+.ballon_wrapper .ballon_body {
   font-weight: bold;
   margin-right: 5px;
 }

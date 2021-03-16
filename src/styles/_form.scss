@@ -7,8 +7,15 @@
     font-size: 15px;
     font-weight: 300;
     font-family: FiraSans, serif;
+    .valid & {
+      //background: #ffffff;
+    }
+    .valid & {
+      box-shadow: 0 0 3px #f37575;
+    }
     &::placeholder {
       color: #9f9f9f;
+
     }
     &:focus-visible {
       outline: none;
