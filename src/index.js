@@ -5,34 +5,17 @@ import {marksFB, getDataFB} from "./server.js";
 
 document.addEventListener('DOMContentLoaded', () => {
 
-
-    // let getDataFB = new Promise(function (res, rej) {
-    //     // Initialize Firebase
-    //     firebase.initializeApp(firebaseConfig);
-    //     const bd = firebase.database();
-    //
-    //     const marks = bd.ref('marks');
-    //
-    //      marks.on('value', (elem) => {
-    //         marksFB = elem.val()
-    //         console.log('fb - marksFB', marksFB)
-    //          res()
-    //     });
-    // })
     getDataFB
         .then(function () {
             let marks = marksFB
-            // console.log(marksFB)
             let address
             let coords
-            // let geoObjects = []
             ymaps.ready(init)
 
             function init() {
                 let myMap = new ymaps.Map('map', {
                     center: [58.01, 56.23],
                     zoom: 14,
-                    // controls: ['zoomControl', 'searchControl', 'fullscreenControl'],
                     controls: ['smallMapDefaultSet'],
                 }, {
                     searchControlProvider: 'yandex#search'
@@ -59,7 +42,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     '            </div>\n' +
                     ' {% endfor %}' +
                     '          </div>\n' +
-                    `${formTemplate}\n` +
+                    '          <form class="popup__form form" data-id="{{properties.id}}">\n' +
+                    '            <h3 class="form__title">ВАШ ОТЗЫВ</h3>\n' +
+                    '            <div class="form__input">\n' +
+                    '              <input placeholder="Ваше имя" type="text" name="name" autofocus>\n' +
+                    '            </div>\n' +
+                    '            <div class="form__input">\n' +
+                    '              <input placeholder="Укажите место" type="text" name="placeName" >\n' +
+                    '            </div>\n' +
+                    '            <div class="form__textarea">\n' +
+                    '              <textarea placeholder="Поделитесь впечатлениями" rows="5" name="review" ></textarea>\n' +
+                    '            </div>\n' +
+                    '            <div class="popup__btn _right">\n' +
+                    '              <button class="btn">Добавить</button>\n' +
+                    '            </div>\n' +
+                    '          </form>' +
                     '        </div>\n' +
                     '      </div>',
 
@@ -71,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         },
                     });
 
-
                 // ШАБЛОН БАЛУНА ПРИ КЛИКЕ
                 myMap.events.add('click', function (e) {
                     document.body.classList.remove('valid')
@@ -79,14 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     let myGeocoder = ymaps.geocode(coords);
 
                     if (!myMap.balloon.isOpen()) {
-
                         myGeocoder
-                            .then(
-                                function (res) {
-                                    address = res.geoObjects.get(0).properties.getAll().name
-
-                                }
-                            )
+                            .then( res => address = res.geoObjects.get(0).properties.getAll().name )
                             .then(
                                 function (res) {
                                     myMap.balloon.open(coords, {
@@ -113,11 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                             '      </div>'
 
                                     }, {closeButton: true})
-
                                 }
                             )
-
-
                     } else {
                         myMap.balloon.close();
                     }
@@ -125,66 +112,69 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // ДОБОВЛЕНИЕ ОТЗЫВА В МАССИВ
                 function addReview() {
-                    let date = new Date()
-                    let dataForm = {
-                        name: '',
-                        date: `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`,
-                        dateTime: `${date.getHours()}.${date.getMinutes()}.${date.getSeconds()}`,
-                        review: '',
-                        placeName: '',
-                    }
+                    let newDate = new Date()
+                    let reviewName, reviewPlaceName, reviewText
+                    let date = `${newDate.getDate()}.${newDate.getMonth()}.${newDate.getFullYear()}`
+
                     let validName = false
                     let validPlaceName = false
                     let validReview = false
 
                     document.addEventListener('keyup', function (e) {
 
-                        let pattern = /^[A-Za-zА-Яа-яЁё]{2,30}$/
+                        let pattern = /^[A-Za-zА-Яа-яЁё_ ]{2,30}$/
                         // let patternReview = /[.+]{2,14}$/
                         let value = e.target.value
 
 
-                        if(e.target.name === 'name') {
-                            dataForm.name = e.target.value
+                        if (e.target.name === 'name') {
+                            reviewName = e.target.value
                             validName = pattern.test(value)
                         }
-                        if(e.target.name === 'placeName') {
-                            dataForm.placeName = e.target.value
-                            validPlaceName = pattern.test(value)
+                        if (e.target.name === 'placeName') {
+                            reviewPlaceName = e.target.value
+                            validPlaceName = value.length > 1
                         }
-                        if(e.target.name === 'review') {
-                            dataForm.review = e.target.value
-                            // validReview = patternReview.test(value)
+                        if (e.target.name === 'review') {
+                            reviewText = e.target.value
                             validReview = value.length > 1
                         }
                         // console.log(validName, validPlaceName, validReview)
+
                     })
                     document.addEventListener('click', function (e) {
                         e.preventDefault()
 
                         if (e.target.classList[0] === 'btn') {
-
                             if ( validName && validPlaceName && validReview) {
-                                const address = document.querySelector('.popup__title').textContent
-
+                            // if (true) {
+                                let formId = e.target.form.getAttribute('data-id')
                                 function addObjData() {
-                                    let step = false
+
+                                    let reviewObj = Object.assign({}, {
+                                        name: reviewName,
+                                        date: date,
+                                        review: reviewText,
+                                        placeName: reviewPlaceName
+                                    });
+                                    let newItem = true
                                     marks.forEach(function (obj) {
-
-                                        if (obj.address === address) {
-                                            step = true
-                                            obj.reviews.push(dataForm)
+                                        // если такой есть => добовяем отзыв
+                                        if (obj.id === Number(formId)) {
+                                            newItem = false
+                                            obj.reviews.push(reviewObj)
                                         }
-
                                     })
-                                    if (!step) {
+
+                                    if (newItem) {
                                         let arrR = []
-                                        arrR.push(dataForm)
+                                        arrR.push(reviewObj)
 
                                         marks.push({
                                             address: address,
                                             coordinates: coords,
-                                            reviews: arrR //todo костыль ¯\_(ツ)_/¯
+                                            id: marks.length + 1,
+                                            reviews: arrR
                                         })
                                     }
 
@@ -199,9 +189,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                     validReview = false
                                 }
 
-                                addObjData()
                                 myMap.balloon.close() //TODO: пооменять на update()?
-
+                                addObjData()
                                 addMarks()
 
                             } else {
@@ -238,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     let placemarks = []
                     marks.forEach(function (obj, i) {
                         let placemark = new ymaps.Placemark(obj.coordinates, {
+                            id: marks.length,
                             address: obj.address,
                             reviews: obj.reviews,
                             hintContent: obj.address,
@@ -248,20 +238,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                         placemarks.push(placemark);
                     })
-
                     myMap.geoObjects.add(clusterer)
                     clusterer.add(placemarks)
-
-                    clusterer.events
-                        .add('mouseenter', function (e) {
-                            e.get('target').options.set('preset', 'islands#greenIcon');
-                        })
-                        .add('mouseleave', function (e) {
-                            e.get('target').options.unset('preset');
-                        });
-
                 }
-
                 addReview()
                 addMarks()
             }

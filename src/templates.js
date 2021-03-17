@@ -9,7 +9,7 @@ export let svg = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/s
     '</svg>'
 
 export let formTemplate =
-    '          <form class="popup__form form">\n' +
+    '          <form class="popup__form form" >\n' +
     '            <h3 class="form__title">ВАШ ОТЗЫВ</h3>\n' +
     '            <div class="form__input">\n' +
     '              <input placeholder="Ваше имя" type="text" name="name" autofocus>\n' +
