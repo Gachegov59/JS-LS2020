@@ -1,7 +1,44 @@
-@import "_base";
-@import "_form";
-@import "_popup";
-@import "_carousel";
-@import "_review";
-@import "_btn";
-@import "_ymap";
+body {
+  padding: 0;
+  margin: 0;
+  font: 21px Helvetica;
+  user-select: none;
+}
+#myCanvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.shapes {
+  position: absolute;
+  right: 0;
+  top: 20px;
+  border: 1px solid rgb(139, 195, 254);
+  border-radius: 5px 0 0 5px;
+  border-right: none;
+  padding: 10px;
+  background: rgba(139, 195, 254, 0.7);
+  &__color {
+    margin-top: 20px;
+  }
+}
+.shape {
+  border-bottom: 1px dashed #1280f2;
+  color: #1280f2;
+  cursor: pointer;
+}
+.shape ~ .shape {
+  margin-top: 5px;
+}
+.shape:hover {
+  color: #555;
+}
+
+input {
+  margin-top: 10px;
+  width: 100%;
+}
