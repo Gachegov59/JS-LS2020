@@ -25,8 +25,51 @@ export let formTemplate =
     '            </div>\n' +
     '          </form>'
 
-export let clusterTemplate  =
+export let MyBalloonContentLayoutClassTemplate  =
+    '<div class="popup">\n' +
+    '        <div class="popup__head">\n' +
+    '          <div class="popup__head-icon">' +
+    `${svg}\n` +
+    '          </div>\n' +
+    '          <div class="popup__title">{{properties.address}}</div>\n' +
+    '        </div>\n' +
+    '        <div class="popup__inner">\n' +
+    '          <div class="popup__reviews scroll">\n' +
+    '{% for value in properties.reviews %} ' +
+    '            <div class="review">\n' +
+    '              <div class="review__info">\n' +
+    '                <div class="review__name">{{value.name}}</div>\n' +
+    '                <div class="review__about">{{value.placeName}} {{value.date}}</div>\n' +
+    '              </div>\n' +
+    '              <p class="review__text"> {{value.review}}</p>\n' +
+    '            </div>\n' +
+    ' {% endfor %}' +
+    '          </div>\n' +
+    '          <form class="popup__form form" data-id="{{properties.id}}">\n' +
+    '            <h3 class="form__title">ВАШ ОТЗЫВ</h3>\n' +
+    '            <div class="form__input">\n' +
+    '              <input placeholder="Ваше имя" type="text" name="name" autofocus>\n' +
+    '            </div>\n' +
+    '            <div class="form__input">\n' +
+    '              <input placeholder="Укажите место" type="text" name="placeName" >\n' +
+    '            </div>\n' +
+    '            <div class="form__textarea">\n' +
+    '              <textarea placeholder="Поделитесь впечатлениями" rows="5" name="review" ></textarea>\n' +
+    '            </div>\n' +
+    '            <div class="popup__btn _right">\n' +
+    '              <button class="btn">Добавить</button>\n' +
+    '            </div>\n' +
+    '          </form>' +
+    '        </div>\n' +
+    '      </div>'
+
+
+export let customItemContentLayoutTemplate  =
     // Флаг "raw" означает, что данные вставляют "как есть" без экранирования html.
-    '<h2 class=ballon_header>{{ properties.balloonContentHeader|raw }}</h2>' +
-    '<div class=ballon_body>{{ properties.balloonContentBody|raw }}</div>' +
-    '<div class=ballon_footer>{{ properties.balloonContentFooter|raw }}</div>'
+    '<h2 class=ballon_header>{{ properties.balloonContentHeader}}</h2>' +
+    '{% for value in properties.reviews %} ' +
+    '<div class=ballon_wrapper>' +
+    '<div class=ballon_body>{{ value.name }}</div>' +
+    '<div class=ballon_footer>{{ value.review }}</div>' +
+    '</div>' +
+    ' {% endfor %}'

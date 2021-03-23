@@ -1,5 +1,4 @@
 .popup {
-  border-radius: 5%;
   background: white;
   width: 379px;
   height: auto;
@@ -30,7 +29,7 @@
   }
 
   &__inner {
-    padding: 0 15px 10px;
+    padding: 0 5px 5px;
   }
   &__close {
     background: transparent;

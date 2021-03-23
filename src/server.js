@@ -1,6 +1,3 @@
-// TODO: Replace the following with your app's Firebase project configuration
-// For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
-// export function firebase() {
 /*eslint-disable */
 export let firebaseConfig = {
     apiKey: 'AIzaSyC1L6hDvbdT6pplHXkKQDPsgTv8oF2h-3o',
@@ -16,18 +13,18 @@ export let firebaseConfig = {
 
 export let marksFB
 
-export let getDataFB = new Promise(function (res, rej) {
-    // Initialize Firebase
+export let getDataFB = new Promise(function (resolve, reject) {
     firebase.initializeApp(firebaseConfig);
     const bd = firebase.database();
-
     const marks = bd.ref('marks');
 
     marks.on('value', (elem) => {
-        marksFB = elem.val()
-        // console.log('fb - marksFB', marksFB)
-        res()
-    });
+        if (elem) {
+            resolve(elem.val())
+        } else {
+            reject( new Error(elem))
+        }
 
+    });
 })
 
